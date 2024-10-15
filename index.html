@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>タイトル</title>
+    <style>
+        .tab-wrap {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .tab-label {
+            color: White;
+            background: LightGray;
+            margin-right: 5px;
+            padding: 3px 12px;
+            order:-1;
+        }
+        .tab-content {
+            width: 100%;
+            display: none;
+        }
+        .tab-switch:checked+.tab-label {
+            background: DeepSkyBlue;
+        }
+        .tab-switch:checked+.tab-label+.tab-content {
+            display: block;
+        }
+        .tab-switch {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-2.2.4.js" ></script>
+
+    <div class="tab-wrap">
+
+
+
+    <script>
+
+        var tabtable = ["TAB-01","TAB-02","TAB-03","TAB-04","TAB-05"];
+        var kindnametable=["埼玉県","東京都","静岡県","大阪府","福岡県"];
+        var innametable=["inbox1","inbox2","inbox3","inbox4","inbox5"];
+        var areatable=["110000","130000","220000","270000","400000"];
+        
+        function func_html(tabno,kindname,inname){
+
+            document.write("<input id=");
+            document.write(tabno); 
+            document.write(" type=\"radio\" name=\"TAB\" class=\"tab-switch\" checked=\"checked\" />");
+            document.write("<label class=\"tab-label\" for=");
+            document.write(tabno);
+            document.write(">");
+            document.write(kindname);
+            document.write("</label>");
+
+            document.write("<div class=\"tab-content\">");
+            document.write("<textarea name=\"comment\"  id=");
+            document.write(inname);
+            document.write(" cols=\"60\" rows=\"30\"></textarea>");
+
+
+        }
+
+        function func_a(area,place){
+
+            var url = "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/"+area+".json";
+            $.ajax({
+              type: "GET",
+              url: url,
+              dataType: "json",
+              // 取得に成功したときの処理
+              success:function(data){
+
+                const data_text = data.text; //data.キー名で値を参照
+
+                var smp=document.getElementById(place);
+                smp.innerHTML = data_text;
+
+              },
+              // 完了したときの処理
+              complete:function(){
+                console.log("通信が完了しました。");
+              },
+              // 失敗したときの処理
+              error:function(){
+                console.log("通信に失敗しました。");
+              }
+            });
+
+        }
+    </script>
+
+
+    <script>
+    for (let i = 0; i < 5; i++) {
+  
+
+
+        let tabno=tabtable[i];
+        let kindname=kindnametable[i];   
+        let inname=innametable[i];         
+        func_html(tabno,kindname,inname)
+
+
+        let area =areatable[i];
+        let place =innametable[i];
+
+        func_a(area,place);
+
+        document.write("</div>");
+    }    
+
+    </script>
+            
+
+    </div>
+
+
+</body>
+</html>
+
